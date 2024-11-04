@@ -19,6 +19,8 @@ namespace Application.Contracts
 
         Task<LoginResponse> LoginAccountAsync(LoginDTO model);
 
+        Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model);
+
         Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model);
 
         Task<IEnumerable<GetRoleDTO>> GetRolesAsync();
