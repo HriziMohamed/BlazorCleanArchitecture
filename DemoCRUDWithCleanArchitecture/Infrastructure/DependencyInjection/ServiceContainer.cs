@@ -38,6 +38,17 @@ namespace Infrastructure.DependencyInjection
             });
             services.AddAuthentication();
             services.AddAuthorization();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("WebUI",
+                     builder => builder
+                    .WithOrigins("https://localhost:7104")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    );
+                         
+            });
             return services;
         }
     }
