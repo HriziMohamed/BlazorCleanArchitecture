@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Request.Account;
-using Application.DTOs.Response.Account;
 using Application.DTOs.Response;
+using Application.DTOs.Response.Account;
 namespace Application.Services
 {
     public interface IAccountService
@@ -14,8 +14,6 @@ namespace Application.Services
         Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model);
 
         Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model);
-
-        Task<IEnumerable<GetRoleDTO>> GetRolesAsync();
 
         Task<IEnumerable<GetUsersWithRolesResponseDTO>> GetUsersWithRolesAsync();
 

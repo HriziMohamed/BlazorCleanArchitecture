@@ -2,17 +2,11 @@
 using Application.DTOs.Response;
 using Application.DTOs.Response.Account;
 using Application.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services
 {
-    public class AccountService(HttpClientService httpClientService): IAccountService
+    public class AccountService(HttpClientService httpClientService) : IAccountService
     {
         public async Task<LoginResponse> LoginAccountAsync(LoginDTO model)
         {
@@ -33,7 +27,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<GeneralResponse> RegisterAccountAsync(CreateAccountDTO model)
+        public async Task<GeneralResponse> CreateAccountAsync(CreateAccountDTO model)
         {
             try
             {
@@ -60,6 +54,43 @@ namespace Application.Services
                 return null;
         }
 
+        public async Task<IEnumerable<GetRoleDTO>> GetRolesAsync()
+        {
+            try
+            {
+                var privateClient = await httpClientService.GetPrivateClient();
+                var response = await privateClient.GetAsync(Constant.GetRolesRoute);
+                string error = CheckResponseStatus(response);
+                if (!string.IsNullOrEmpty(error))
+                    throw new Exception(error);
+
+                var result = await response.Content.ReadFromJsonAsync<IEnumerable<GetRoleDTO>>();
+                return result!;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<GetUsersWithRolesResponseDTO>> GetUsersWithRolesAsync()
+        {
+            try
+            {
+                var privateClient = await httpClientService.GetPrivateClient();
+                var response = await privateClient.GetAsync(Constant.GetUserWithRolesRoute);
+                string error = CheckResponseStatus(response);
+                if (!string.IsNullOrEmpty(error))
+                    throw new Exception(error);
+
+                var result = await response.Content.ReadFromJsonAsync<IEnumerable<GetUsersWithRolesResponseDTO>>();
+                return result!;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task CreateAdminAtFirstStart()
         {
             try
@@ -69,39 +100,46 @@ namespace Application.Services
             }
             catch { }
         }
-        public Task<GeneralResponse> ChangeUserRoleAsync(ChangeUserRoleRequestDTO model)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<GeneralResponse> CreateAccountAsync(CreateAccountDTO model)
+        public async Task<GeneralResponse> ChangeUserRoleAsync(ChangeUserRoleRequestDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var publicClient = await httpClientService.GetPrivateClient();
+                var response = await publicClient.PostAsJsonAsync(Constant.ChangeUserRoleRoute, model);
+                string error = CheckResponseStatus(response);
+                if (!string.IsNullOrEmpty(error))
+                    return new GeneralResponse(false, error);
+                var result = await response.Content.ReadFromJsonAsync<GeneralResponse>();
+                return result!;
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, ex.Message);
+            }
         }
-
         public Task CreateAdmin()
         {
             throw new NotImplementedException();
         }
-
-        public Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model)
+        public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var publicClient = httpClientService.GetPublicClient();
+                var response = await publicClient.PostAsJsonAsync(Constant.RefreshTokenRoute, model);
+                string error = CheckResponseStatus(response);
+                if (!string.IsNullOrEmpty(error))
+                    return new LoginResponse(false, error);
+
+                var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                return result!;
+            }
+            catch (Exception ex)
+            {
+                return new LoginResponse(false, ex.Message);
+            }
         }
 
-        public Task<IEnumerable<GetRoleDTO>> GetRolesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<GetUsersWithRolesResponseDTO>> GetUsersWithRolesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
