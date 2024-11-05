@@ -10,8 +10,8 @@ namespace Application.DTOs.Request.Account
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; } = string.Empty;
         [Required]
-        [RegularExpression("^(?=.*?[A-Z])(?=.*?[a−z])(?=.*?[0-9])(?=.*? [#?!@$ %^&*-]).{8,}$",
-        ErrorMessage = "You password must be a mix of Alphanumeric and special characters")]
+        //[RegularExpression("^(?=.*?[A-Z])(?=.*?[a−z])(?=.*?[0-9])(?=.*? [#?!@$ %^&*-]).{8,}$",
+        //ErrorMessage = "You password must be a mix of Alphanumeric and special characters")]
         public string Password { get; set; } = string.Empty;
 
 
