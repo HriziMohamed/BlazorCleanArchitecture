@@ -118,9 +118,14 @@ namespace Application.Services
                 return new GeneralResponse(false, ex.Message);
             }
         }
-        public Task CreateAdmin()
+        public async Task CreateAdmin()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var client = httpClientService.GetPublicClient();
+                await client.PostAsync(Constant.CreateAdminRoute, null);
+            }
+            catch { }
         }
         public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model)
         {
@@ -141,5 +146,9 @@ namespace Application.Services
             }
         }
 
+        public Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

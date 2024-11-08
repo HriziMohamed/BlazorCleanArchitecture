@@ -13,7 +13,7 @@ namespace Application.Services
 
         Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model);
 
-        Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model);
+       // Task<GeneralResponse> CreateRoleAsync(CreateRoleDTO model);
 
         Task<IEnumerable<GetUsersWithRolesResponseDTO>> GetUsersWithRolesAsync();
 
