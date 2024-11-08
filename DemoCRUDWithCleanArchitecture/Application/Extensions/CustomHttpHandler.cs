@@ -9,7 +9,6 @@ using System.Net.Http.Headers;
 namespace Application.Extensions
 {
     public class CustomHttpHandler(LocalStorageService  localStorageService,
-        HttpClientService httpClientService,
         NavigationManager navigationManager, IAccountService accountService) : DelegatingHandler
     {
 
@@ -47,7 +46,6 @@ namespace Application.Extensions
         {
             try
             {
-                var client = httpClientService.GetPublicClient();
                 var response = await accountService.RefreshTokenAsync(new RefreshTokenDTO { Token = refreshToken });
                 if (response == null || response.Token == null) 
                 {
